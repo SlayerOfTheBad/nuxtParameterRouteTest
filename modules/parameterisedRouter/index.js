@@ -34,6 +34,11 @@ function constructRoutes (routes, options) {
 }
 
 function recursiveFilterRoutes (routeArray, parameters) {
+  if (!Array.isArray(routeArray)) {
+    console.log(routeArray);
+    return;
+  }
+
   let routes = [];
 
   // An array of strings describing (sub)modules that need to be imported in their entirety

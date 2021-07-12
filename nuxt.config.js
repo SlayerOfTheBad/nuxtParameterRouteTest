@@ -29,6 +29,7 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     '~/modules/parameterisedRouter',
+    'nuxt-typed-router',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -53,19 +54,23 @@ export default {
   build: {
   },
 
+  typedRouter: {
+    filePath: './models/__routes.js', // or .ts,
+  },
+
   parameterisedRoutes: {
     '~client': {
       oppasland: {
-        module1: ['somepart'],
-        module2: ['beginpoint', 'endpoint'],
-        module3: false,
+        userapp: ['somepart'],
+        postcodes: ['beginpoint', 'endpoint'],
+        translations: false,
       },
       huurstunt: {
-        module1: false,
-        module2: true,
-        module3: true,
+        userapp: false,
+        postcodes: true,
+        translations: true,
       },
-      '123opzeggen': ['module1', 'module3'],
+      opzeggen: ['userapp', 'translations'],
     },
   },
 };
