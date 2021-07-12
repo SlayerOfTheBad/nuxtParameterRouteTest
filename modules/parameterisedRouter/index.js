@@ -1,6 +1,17 @@
 import util from 'util';
+import { Builder } from '@nuxt/builder/dist/builder';
 
-export default function () {
+let microserviceRoutes = [];
+
+export default async function generateParameterisedRoutes () {
+  const { nuxt } = this;
+  const builder = new Builder(nuxt);
+  builder.options.dir.pages = ['microservices', 'pages'];
+  builder._nuxtPages = true;
+  const templateContext = builder.createTemplateContext();
+  await builder.resolveRoutes(templateContext);
+  microserviceRoutes = builder.routes;
+
   const options = this.nuxt.options.parameterisedRoutes || undefined;
 
   if (options === undefined) {
@@ -8,14 +19,15 @@ export default function () {
   }
 
   this.options.router.extendRoutes = function (routes) {
+    console.log(routes);
     constructRoutes(routes, options);
   };
   // console.log('extended routes');
 }
 
 function constructRoutes (routes, options) {
-  console.log(routes[0]);
-  console.log(options);
+  // console.log(routes[0]);
+  // console.log(options);
   // console.log('FILTERS ROUTES START');
   // Parse the config
   const newRoutes = recursiveFilterRoutes(routes, options);
@@ -28,14 +40,14 @@ function constructRoutes (routes, options) {
   // console.log('FILTERS ROUTES END');
 
   // Shows the new routes;
-  console.log('NEW ROUTES BEGIN');
-  console.log(util.inspect(routes, false, null, true));
-  console.log('NEW ROUTES END');
+  // console.log('NEW ROUTES BEGIN');
+  // console.log(util.inspect(routes, false, null, true));
+  // console.log('NEW ROUTES END');
 }
 
 function recursiveFilterRoutes (routeArray, parameters) {
   if (!Array.isArray(routeArray)) {
-    console.log(routeArray);
+    // console.log(routeArray);
     return;
   }
 
@@ -73,6 +85,7 @@ function recursiveFilterRoutes (routeArray, parameters) {
       // e.g. ~client can become huurstunt, oppasland and 123opzeggen.
       if (module.match('~.*')) {
         // Grab the route struct of the parameterisable route;
+        // console.log(routeArray);
         const routeStruct = routeArray.filter(struct => struct.name === module)[0];
         // If it does not exist, your config or your folders is fucked.
         if (routeStruct === undefined) {
@@ -104,6 +117,7 @@ function recursiveFilterRoutes (routeArray, parameters) {
 }
 
 function parameterizeRoutes (routeStruct, parameters) {
+  console.log(microserviceRoutes);
   const parameterisedRoutes = [];
   // For each key in the parameterisation object...
   Object.keys(parameters).forEach((key) => {
@@ -111,6 +125,7 @@ function parameterizeRoutes (routeStruct, parameters) {
     let routeChunk = JSON.parse(JSON.stringify(routeStruct));
     // Rename the path to the parameter
     routeChunk.path = routeChunk.path.replace(routeChunk.name, key);
+    routeChunk.children = JSON.parse(JSON.stringify(microserviceRoutes));
     // Rename the route and the child route's names to have the parameter instead of the slug
     routeChunk = recursiveRenameRoutes(routeChunk, routeChunk.name, key);
 

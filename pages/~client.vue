@@ -8,6 +8,7 @@
 <script>
 export default {
   name: 'Client',
+  components: { Module3, Module2, Module1 },
 };
 </script>
 
