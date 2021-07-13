@@ -23,6 +23,7 @@
     "eslint": "^7.29.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-vue": "^7.12.1",
+    "glob": "^7.1.7",
     "nuxt-typed-router": "^0.2.20"
   }
 }
