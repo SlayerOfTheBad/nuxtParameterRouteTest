@@ -57,6 +57,8 @@ function recursiveFilterRoutes (routeArray, parameters) {
     // and the value is further configuration.
 
     Object.keys(parameters).forEach((module) => {
+      if (module === 'add') return;
+
       // <module>: false indicates the entire module can be discarded
       if (parameters[module] === false) {
         return;
@@ -87,11 +89,13 @@ function recursiveFilterRoutes (routeArray, parameters) {
       // Configuration is further configuration (either an array or an object)
       // And its children need to be recursively processed
 
+      console.log(routeArray);
+      console.log(module);
       // Gather the module
       const routeStruct = routeArray.filter(struct => struct.path.includes(module))[0];
       // Set the children to the processed children
       routeStruct.children = recursiveFilterRoutes(
-        routeStruct.children,
+        routeStruct.children ?? [],
         parameters[module],
       );
 
@@ -107,6 +111,10 @@ function parameterizeRoutes (routeStruct, parameters) {
   const parameterisedRoutes = [];
   // For each key in the parameterisation object...
   Object.keys(parameters).forEach((key) => {
+    if (key === 'add') {
+      routeStruct['meta'] = { something: parameters[key]['meta'] };
+      return;
+    }
     // Copy the struct
     let routeChunk = JSON.parse(JSON.stringify(routeStruct));
     // Rename the path to the parameter

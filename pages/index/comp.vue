@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'component',
+  name: 'comp',
 };
 </script>
 

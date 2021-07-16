@@ -1,3 +1,7 @@
+import ExpansionConfig from './utils/expansion-config';
+import MetaConfig from './utils/meta-config';
+import RouteConfig from './utils/route-config';
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -28,7 +32,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
-    '~/modules/parameterisedRouter',
+    '~/modules/paramRoutes',
     'nuxt-typed-router',
   ],
 
@@ -72,6 +76,125 @@ export default {
         translations: true,
       },
       opzeggen: ['userapp', 'translations'],
+      all: ['userapp', 'postcodes', 'translations'],
     },
   },
+
+  paramRoutes: [
+    new ExpansionConfig({
+      paramRoute: '~client',
+      expansions: [
+        new RouteConfig({
+          baseName: '~client',
+          name: 'oppasland',
+          unlisted: false,
+          meta: [
+            new MetaConfig({
+              key: 'api',
+              data: 'api-v2',
+              recursive: true,
+            }),
+            new MetaConfig({
+              key: 'local',
+              data: 'data',
+              recursive: false,
+            }),
+          ],
+          subroutes: [
+            new RouteConfig({
+              baseName: 'userapp',
+              name: 'userapp',
+              unlisted: false,
+              subroutes: [
+                new RouteConfig({
+                  baseName: 'somepart',
+                }),
+              ],
+            }),
+            new RouteConfig({
+              baseName: 'postcodes',
+              name: 'postcodes',
+              unlisted: false,
+              subroutes: [
+                new RouteConfig({
+                  baseName: 'beginpoint',
+                }),
+                new RouteConfig({
+                  baseName: 'endpoint',
+                }),
+              ],
+            }),
+          ],
+        }),
+        new RouteConfig({
+          baseName: '~client',
+          name: 'huurstunt',
+          unlisted: false,
+          meta: [
+            new MetaConfig({
+              key: 'api',
+              data: 'api-v1',
+              recursive: true,
+            }),
+          ],
+          subroutes: [
+            new RouteConfig({
+              baseName: 'postcodes',
+              name: 'postcodes',
+              unlisted: true,
+            }),
+            new RouteConfig({
+              baseName: 'translations',
+              name: 'translations',
+            }),
+          ],
+        }),
+        new RouteConfig({
+          baseName: '~client',
+          name: 'opzeggen',
+          unlisted: false,
+          meta: [
+            new MetaConfig({
+              key: 'api',
+              data: 'api-v1',
+              recursive: true,
+            }),
+          ],
+          subroutes: [
+            new RouteConfig({
+              baseName: 'userapp',
+              name: 'userapp',
+              alias: ['cancel-users'],
+              unlisted: true,
+              subroutes: [
+                new RouteConfig({
+                  baseName: 'somepart',
+                }),
+              ],
+            }),
+            new RouteConfig({
+              baseName: 'postcodes',
+              unlisted: true,
+              subroutes: [
+                new RouteConfig({
+                  baseName: 'beginpoint',
+                }),
+                new RouteConfig({
+                  baseName: 'endpoint',
+                }),
+              ],
+            }),
+          ],
+        }),
+        new RouteConfig({
+          baseName: '~client',
+          name: 'all',
+          unlisted: true,
+        }),
+      ],
+    }),
+    new RouteConfig({
+      baseName: 'index',
+    }),
+  ],
 };

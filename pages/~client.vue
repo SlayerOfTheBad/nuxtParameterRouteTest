@@ -8,6 +8,9 @@
 <script>
 export default {
   name: 'Client',
+  mounted () {
+    console.log(this.$route.meta);
+  },
 };
 </script>
 

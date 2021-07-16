@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>The first Module</h2>
+    <p>{{ $route.meta }}</p>
     <NuxtChild />
   </div>
 </template>
