@@ -14,6 +14,10 @@ export default class ExpansionConfig {
       if (!(item instanceof RouteConfig)) {
         throw new TypeError('expansions must only contain RouteConfig');
       }
+
+      if (item.baseName !== this.paramRoute) {
+        throw new TypeError('baseName of RouteConfig for ExpansionConfig must equal ExpansionConfig::paramRoute');
+      }
     });
   }
 }

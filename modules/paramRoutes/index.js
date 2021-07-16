@@ -7,13 +7,13 @@ export default function () {
 
   this.options.router.extendRoutes = (routes) => {
     routes = constructRoutes(routes, options);
-    console.log(routes);
+    console.log(routes[0]);
     return routes;
   };
 }
 
 function constructRoutes (routeArray, configArray) {
-  let routes = [];
+  const routes = [];
   configArray.forEach((config) => {
     if (config instanceof RouteConfig) {
       const route = routeArray.filter(routeStruct => routeStruct.path.includes(config.baseName) || routeStruct.name === config.baseName);
@@ -73,21 +73,21 @@ function processRoute (routeStruct, config) {
 function processMeta (routeStruct, metaArray) {
   if (metaArray.length === 0) { return; }
 
-  routeStruct.meta = {};
+  if (typeof routeStruct.meta !== 'object') { routeStruct.meta = {}; }
   metaArray.forEach(meta => meta.recursive ? addMetaRecursive(routeStruct, meta) : addMeta(routeStruct, meta));
 }
 
 function addMeta (routeStruct, meta) {
-  if (typeof routeStruct.meta !== 'object') { return; }
+  // if (typeof routeStruct.meta !== 'object') { return; }
 
   routeStruct.meta[meta.key] = meta.data;
 }
 
 function addMetaRecursive (routeStruct, meta) {
-  if (typeof routeStruct.meta !== 'object') { return; }
+  // if (typeof routeStruct.meta !== 'object') { return; }
 
   routeStruct.meta[meta.key] = meta.data;
-  (routeStruct.children ?? []).forEach(routeChild => addMetaRecursive(routeChild, meta));
+  (routeStruct.children ?? []).forEach(routeChild => processMeta(routeChild, [meta]));
 }
 
 function recursiveRenameRoutes (routeStruct, slug, replacement) {

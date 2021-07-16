@@ -12,8 +12,8 @@ export default class RouteConfig {
   }) {
     if (!(typeof baseName === 'string' || baseName instanceof String)) { throw new TypeError('baseName must be a string'); }
     this.baseName = baseName;
-    this.unlisted = unlisted ?? !Array.isArray(subroutes);
     this.name = name ?? baseName;
+    this.unlisted = unlisted ?? !Array.isArray(subroutes);
     this.alias = alias ?? [];
     this.meta = meta ?? [];
     this.subroutes = subroutes ?? [];

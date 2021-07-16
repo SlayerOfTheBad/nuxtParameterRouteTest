@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>The client component</h1>
+    <p>{{ $route.meta }}</p>
     <NuxtChild />
   </div>
 </template>
